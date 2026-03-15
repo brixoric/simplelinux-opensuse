@@ -38,4 +38,22 @@ Copy-Item -Path $prepFolder -Destination $targetPath -Recurse -Force
 Write-Host "Filesystem prep done."
 
 # TODO:
-# Resize Windows partition to leave 10GB and flash image to the remaining space.
+# Resize Windows partition to leave 15GB and flash image to the remaining space.
+#
+# Partition scheme:
+# Formatted ESP - prep folder
+# Windows partition
+# 1GB ESP for Linux formatted as FAT32
+# 4GB swap
+# 10GB root (resized in post.sh) ( )
+# 
+# Notes:
+#
+# System should boot into the Linux ESP, which then boots up as normal but starts post.sh when the user logs in as root.
+#
+# Linux system mounts:
+# /dev/sda1 - Linux ESP
+# /dev/sda2 - Linux swap
+# /dev/sda3 - Linux root ()
+# /dev/sda4 - Windows EFI (that contains the prep folder with user data and post.sh)
+# /dev/sda5 - Windows partition (deleted in Linux)
