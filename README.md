@@ -2,7 +2,9 @@
 Windows program that installs openSUSE without the user having to boot into an installation USB. All user files are transferred over
 
 ## Requirements
-WIP
+* 15GB storage free
+* Windows ESP not mounted (normally isn't)
+* SATA drive (NVMe support coming in another branch or soon)
 
 ## Disclaimer!!!!!
 WIP
