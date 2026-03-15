@@ -34,12 +34,23 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # 3. Reload the partition table into the kernel
-echo "Notifying kernel of partition changes..."
+echo "notifying kernel of partition changes..."
 sudo partprobe "$DISK"
 
 # 4. Grow the Btrfs filesystem to fill the new partition space
-echo "Resizing Btrfs filesystem on ${MOUNT_POINT}..."
+echo "resizing btrfs on ${MOUNT_POINT}..."
 sudo btrfs filesystem resize max "$MOUNT_POINT"
 
-echo "--- Finished ---"
+echo "finished"
 df -h "$MOUNT_POINT"
+
+# TODO:
+# Add first boot stuff here
+
+# time to extract stuff and demolish microslop's garbage excuse for an OS.
+tar -xf /prep/targz/docs.tar.gz -C $HOME/Documents/
+tar -xf /prep/targz/recentDownloads.tar.gz -C $HOME/Downloads/
+tar -xf /prep/targz/pictures.tar.gz -C $HOME/Pictures/
+tar -xf /prep/targz/desktop.tar.gz -C $HOME/Desktop/
+cp -r /prep/chrome_data/ $HOME/chrome_data/
+echo "Raw chrome data. Just for looking at" >> $HOME/chrome_data/what.txt
