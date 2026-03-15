@@ -40,18 +40,57 @@ Copy-Item -Path $prepFolder -Destination $targetPath -Recurse -Force
 
 Write-Host "Copied prep/"
 
-# TODO:
-# Resize Windows partition to leave 15GB and flash image to the remaining space.
-#
-# Partition scheme:
-# Formatted ESP - prep folder
-# Windows partition
-# 1GB ESP for Linux formatted as FAT32
-# 4GB swap
-# 10GB root (resized in post.sh) ( )
-# 
-# Notes:
-#
+# Resize Windows partition to leave 15GB and create Linux partitions
+Write-Host "Creating Linux partition scheme..."
+
+# Get the Windows data partition (largest NTFS partition on the disk, excluding recovery partitions)
+$disk = Get-Disk -Number $diskNumber
+$winPartition = $disk | Get-Partition | Where-Object { $_.Type -eq 'Basic' } | ForEach-Object { 
+    try { Get-Volume -Partition $_ -ErrorAction Stop } catch { $null }
+} | Where-Object { $_.FileSystem -eq 'NTFS' } | Select-Object -First 1
+
+if (-not $winPartition) {
+    Write-Error "[ERR03]"
+    exit 1
+}
+
+# Get partition object for resizing
+$partToResize = Get-Partition -Volume $winPartition
+
+# Calculate new size: leave 15GB for Linux partitions
+$totalDiskSize = $disk.Size
+$resizeSize = $totalDiskSize - 15GB
+
+# Resize Windows partition
+try {
+    Resize-Partition -InputObject $partToResize -Size $resizeSize -Confirm:$false
+    Write-Host "Resized Windows partition to $(($resizeSize) / 1GB -as [int])GB"
+} catch {
+    Write-Error "[ERR04] Failed to resize Windows partition"
+    exit 1
+}
+
+# Create Linux partitions with specified sizes
+# Sizes: 1GB ESP, 4GB swap, 10GB root
+try {
+    # Create Linux ESP partition (1GB)
+    $esp = New-Partition -DiskNumber $diskNumber -Size 1GB -GptType "{ebd0a0a2-b9e5-4433-a86d-b3b64c3c2500}"
+    Write-Host "Created Linux ESP partition (1GB)"
+    
+    # Create Linux Swap partition (4GB)
+    $swap = New-Partition -DiskNumber $diskNumber -Size 4GB -GptType "{0657fd6d-a4ab-43c4-84e5-0933c84b4f4f}"
+    Write-Host "Created Linux Swap partition (4GB)"
+    
+    # Create Linux Root partition (10GB)
+    $root = New-Partition -DiskNumber $diskNumber -Size 10GB -GptType "{0fc63daf-8483-4772-8e79-3d69d8477de4}"
+    Write-Host "Created Linux Root partition (10GB)"
+    
+    Write-Host "Linux partition scheme created successfully"
+} catch {
+    Write-Error "[ERR05] Failed to create Linux partitions"
+    exit 1
+}
+
 # System should boot into the Linux ESP, which then boots up as normal but starts post.sh when the user logs in as root.
 #
 # Linux system mounts:
