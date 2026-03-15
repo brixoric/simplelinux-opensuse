@@ -4,7 +4,7 @@
 
 #!/bin/bash
 
-# Below is GPT expansion to grow root. Written by Gemini and not me because its too late at night and i hate bash.
+# Below is GPT expansion to grow root. Written by Gemini and not me because its too late at night and i hate bash because its just weird.
 # --- CONFIGURATION ---
 DISK="/dev/sda"
 PART_NUM="3"
