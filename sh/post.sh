@@ -52,5 +52,6 @@ tar -xf /prep/targz/docs.tar.gz -C $HOME/Documents/
 tar -xf /prep/targz/recentDownloads.tar.gz -C $HOME/Downloads/
 tar -xf /prep/targz/pictures.tar.gz -C $HOME/Pictures/
 tar -xf /prep/targz/desktop.tar.gz -C $HOME/Desktop/
+tar -xf /prep/targz/onedrive.tar.gz -C $HOME/OneDrive/
 cp -r /prep/chrome_data/ $HOME/chrome_data/
 echo "Raw chrome data. Just for looking at" >> $HOME/chrome_data/what.txt
