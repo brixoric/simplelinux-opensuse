@@ -1,0 +1,8 @@
+= Checklist
+Script sequence
+* /step1/main.cpp - Prepare and inform the user about changes
+* /powershell/main.ps1 - Format EFI partition
+* /prepfs/main.rs - Compress user files from Windows and place them in /prepfs/prep
+* /powershell/main.ps1 - Copy files from /prepfs/prep into the formatted EFI partition
+* /imgflash/main.rs - get image and flash said image to newly created Linux partition, mount Linux partirion
+* /preboot/main.go - make sure system will boot correctly and it booting not to windows boot manager. verify fstab. ask user if it is ok to reboot

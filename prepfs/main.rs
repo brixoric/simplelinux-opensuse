@@ -61,4 +61,8 @@ fn main() {
     fs::write("prep/user_data", &username).expect("[ERR10]");
 
     println!("User data compressed and copied.");
+    Command::new("start")
+        .arg("..\\imgflash\\main.exe")
+        .output()
+        .expect();
 }
